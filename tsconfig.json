@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "module": "commonjs",
+        "noImplicitAny": false,
+        "outDir": "dist",
+        "removeComments": false,
+        "sourceMap": false,
+        "target": "es6",
+        "watch": false,
+        "moduleResolution": "classic"
+    },
+    "files": [
+      "lib/alexia.ts",
+      "lib/built-in-intents-map.ts",
+      "lib/built-in-slots-map.ts",
+      "lib/create-app.ts",
+      "lib/create-custom-slot.ts",
+      "lib/create-intent.ts",
+      "lib/create-request.ts",
+      "lib/generate-speech-assets.ts",
+      "lib/handle-request.ts",
+      "lib/validator.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

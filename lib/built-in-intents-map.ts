@@ -1,5 +1,6 @@
 'use strict';
-module.exports = {
+
+export = {
     cancel: 'AMAZON.CancelIntent',
     help: 'AMAZON.HelpIntent',
     next: 'AMAZON.NextIntent',

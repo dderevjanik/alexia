@@ -3,12 +3,9 @@ const _ = require('lodash');
 const handleRequest = require('./handle-request');
 const createIntent = require('./create-intent');
 const createCustomSlot = require('./create-custom-slot');
-const createRequest = require('./create-request');
 const generateSpeechAssets = require('./generate-speech-assets');
-const builtInIntentsMap = require('./built-in-intents-map')
-
+const builtInIntentsMap = require('./built-in-intents-map');
 const builtInIntentsList = _.keys(builtInIntentsMap).join(', ');
-
 /**
  * Create new app
  * @param {string} name - App name
@@ -16,21 +13,19 @@ const builtInIntentsList = _.keys(builtInIntentsMap).join(', ');
  * @param {string} [options.version] - App version
  * @param {string[]} [options.ids] - Array of app ids. Only requests with supported app ids will be handled
  */
-module.exports = (name, options) => {
-    let app = {
+const createApp = (name, options) => {
+    const app = {
         name: name,
         options: options,
         intents: {},
         customSlots: {},
         actions: []
     };
-
-    let handlers = {
+    const handlers = {
         onStart: () => 'Welcome',
-    	onEnd: () => 'Bye',
+        onEnd: () => 'Bye',
         defaultActionFail: () => 'Sorry, your command is invalid'
     };
-
     /**
      * Sets handler to be called on application start
      * @param {function} handler - Handler to be called when app is started without intent
@@ -38,23 +33,20 @@ module.exports = (name, options) => {
     app.onStart = (handler) => {
         handlers.onStart = handler;
     };
-
     /**
      * Sets handler to be called on application end
-     * @param {function} handler - Handler to be called when application is unexpectedly terminated 
+     * @param {function} handler - Handler to be called when application is unexpectedly terminated
      */
     app.onEnd = (handler) => {
         handlers.onEnd = handler;
     };
-
     /**
      * Sets handler to be called on default action fail
-     * @param {function} handler - Default handler to be called when action can not be invoked 
+     * @param {function} handler - Default handler to be called when action can not be invoked
      */
     app.defaultActionFail = (handler) => {
         handlers.defaultActionFail = handler;
     };
-    
     /**
      * Creates intent
      * @param {string} name - Intent name. Should not be equal to built-in intent name. It is possible to use this function to create built-in intents but utterances are required argument and you need to specify full built-in intent name f.e. `AMAZON.StopIntent`. See `{@link app.builtInIntent}`. If not specified (null, undefined or empty string), automatically generated intent name is used but we recommend to name each intent
@@ -64,10 +56,8 @@ module.exports = (name, options) => {
     app.intent = (name, richUtterances, handler) => {
         const intent = createIntent(app.intents, name, richUtterances, handler);
         app.intents[intent.name] = intent;
-
         return intent;
     };
-
     /**
      * Creates built-int intent.
      * Essentialy the same as `intent` but with optional `utterances` since we need to specify each built-in intent has its own set of default utterances you are not required to extend
@@ -77,38 +67,31 @@ module.exports = (name, options) => {
      */
     app.builtInIntent = (name, utterances, handler) => {
         // Validate built-in intent name
-        if(!builtInIntentsMap[name]) {
+        if (!builtInIntentsMap[name]) {
             throw new Error(`Built-in Intent name ${name} is invalid. Please use one of: ${builtInIntentsList}`);
         }
-
         // Shift ommited arguments (utternaces are optional)
-        if(!handler) {
+        if (!handler) {
             handler = utterances;
             utterances = undefined;
         }
-
         app.intent(name, utterances, handler);
     },
-
-    /**
-     * Handles request and calls done when finished
-     * @param {Object} request - Request JSON to be handled. 
-     * @param {Function} done - Callback to be called when request is handled. Callback is called with one argument - response JSON
-     */
-    app.handle = (request, done) => {
-        handleRequest(app, request, handlers, done);
-    };
-
+        /**
+         * Handles request and calls done when finished
+         * @param {Object} request - Request JSON to be handled.
+         * @param {Function} done - Callback to be called when request is handled. Callback is called with one argument - response JSON
+         */
+        app.handle = (request, done) => handleRequest(app, request, handlers, done);
     /**
      * Creates custom slot
-     * @param {string} name - Name of the custom slot 
+     * @param {string} name - Name of the custom slot
      * @param {string[]} samples - Array of custom slot samples
      */
     app.customSlot = (name, samples) => {
         const customSlot = createCustomSlot(app.customSlots, name, samples);
         app.customSlots[name] = customSlot;
     };
-
     /**
      * Creates action
      * @param {string} action - Action object
@@ -119,19 +102,16 @@ module.exports = (name, options) => {
      */
     app.action = (action) => {
         app.actions.push({
-            from: typeof(action.from) === 'string' ? action.from : action.from.name,
-            to: typeof(action.to) === 'string' ? action.to : action.to.name,
+            from: typeof (action.from) === 'string' ? action.from : action.from.name,
+            to: typeof (action.to) === 'string' ? action.to : action.to.name,
             if: action.if,
             fail: action.fail
         });
     };
-
     /**
      * Generates speech assets object: {schema, utterances, customSlots}
      */
-    app.speechAssets = () => {
-        return generateSpeechAssets(app);
-    };
-
+    app.speechAssets = () => generateSpeechAssets(app);
     return app;
 };
+module.exports = createApp;

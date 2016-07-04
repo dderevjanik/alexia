@@ -2,10 +2,10 @@
   "name": "alexia",
   "version": "1.0.1",
   "description": "A Framework for creating Amazon Echo (Alexa) skills using Node.js",
-  "main": "src/alexia.js",
+  "main": "dist/alexia.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Accenture/alexia.git"
+    "url": "git+https://github.com/dderevjanik/alexia.git"
   },
   "author": {
     "name": "Matthew D. Lancaster",
@@ -15,9 +15,14 @@
   "contributors": [
     "Slavomir Kubacka <slavomir.kubacka@accenture.com>",
     "Michal Morvay <michal.morvay@accenture.com",
-    "Michael Gloger <michael.gloger@accenture.com>"
+    "Michael Gloger <michael.gloger@accenture.com>",
+    "Daniel Derevjanik <daniel.derevjanik@gmail.com>"
   ],
+  "typescript": {
+    "definition": "dist/alexia.d.ts"
+  },
   "scripts": {
+    "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "test": "istanbul cover node_modules/mocha/bin/_mocha -- -u exports --reporter spec",
@@ -42,7 +47,8 @@
   "files": [
     "LICENSE",
     "README.md",
-    "src/"
+    "dist/",
+    "lib/"
   ],
   "keywords": [
     "alexa",

@@ -2,7 +2,7 @@
 const createApp = require('./create-app');
 const createRequest = require('./create-request');
 
-module.exports = {
+export = {
     createApp: createApp,
     createLaunchRequest: createRequest.launchRequest,
     createSessionEndedRequest: createRequest.sessionEndedRequest,

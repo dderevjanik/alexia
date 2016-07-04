@@ -1,7 +1,8 @@
 'use strict';
-const _ = require('lodash');
-const builtInSlotsMap = require('./built-in-slots-map');
-const validator = require('./validator');
+import _ = require('lodash');
+import builtInSlotsMap = require('./built-in-slots-map');
+import validator = require('./validator');
+
 const builtInSlotsValues = _.values(builtInSlotsMap);
 
 /**
@@ -10,7 +11,7 @@ const builtInSlotsValues = _.values(builtInSlotsMap);
  * @param {string} name - Name of the custom slot 
  * @param {string[]} samples - Array of custom slot samples
  */
-module.exports = (customSlots, name, samples) => {
+const createCustomSlot = (customSlots, name, samples) => {
 
     if(customSlots[name]) {
         throw new Error(`Slot with name ${name} is already defined`);
@@ -35,3 +36,5 @@ module.exports = (customSlots, name, samples) => {
         samples
     };
 };
+
+export = createCustomSlot;

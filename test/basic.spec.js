@@ -3,7 +3,7 @@ const _ = require('lodash');
 const expect = require('chai').expect;
 const alexia = require('../');
 const app = require('./test-apps/basic-app');
-const createRequest = require('../src/create-request');
+const createRequest = require('../dist/create-request');
 
 const intentNames = Object.keys(app.intents);
 const intents = _.values(app.intents);

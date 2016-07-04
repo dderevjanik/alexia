@@ -2,7 +2,7 @@
 const _ = require('lodash');
 const expect = require('chai').expect;
 const app = require('./test-apps/actions-app');
-const createRequest = require('../src/create-request');
+const createRequest = require('../dist/create-request');
 
 describe('action app handler', () => {
     let attrs;

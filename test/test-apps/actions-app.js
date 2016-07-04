@@ -1,5 +1,6 @@
 'use strict';
 const alexia = require('../..');
+
 const app = alexia.createApp('ActionsApp');
 
 const intentA = app.intent('IntentA', 'remove stuff', (slots) => {
