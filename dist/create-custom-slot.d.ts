@@ -4,8 +4,8 @@
  * @param {string} name - Name of the custom slot
  * @param {string[]} samples - Array of custom slot samples
  */
-declare const createCustomSlot: (customSlots: any, name: any, samples: any) => {
-    name: any;
-    samples: any;
+declare const createCustomSlot: (customSlots: any, name: string, samples: string[]) => {
+    name: string;
+    samples: string[];
 };
 export = createCustomSlot;

@@ -1,5 +1,6 @@
 'use strict';
 const _ = require('lodash');
+const RequestType = require('./data/request-type');
 /**
  * Creates simple Alexa request
  */
@@ -30,13 +31,13 @@ const requestBuilder = (requestType, intent, isNew, attrs, appId) => {
  * @param {Object} attrs - Session attributes
  * @param {String} [appId] - Application id
  */
-const launchRequest = (attrs, appId) => requestBuilder('LaunchRequest', null, true, attrs, appId);
+const launchRequest = (attrs, appId) => requestBuilder(RequestType.Launch, null, true, attrs, appId);
 /**
  * Creates SessionEndedRequest
  * @param {Object} attrs - Session attributes
  * @param {String} [appId] - Application id
  */
-const sessionEndedRequest = (attrs, appId) => requestBuilder('SessionEndedRequest', null, false, attrs, appId);
+const sessionEndedRequest = (attrs, appId) => requestBuilder(RequestType.SessionEnd, null, false, attrs, appId);
 /**
  * Creates IntentRequest
  * @param {String} name - Name of the intent to be invoked
@@ -53,7 +54,7 @@ const intentRequest = (name, slots, attrs, isNew, appId) => {
             value: key
         };
     }, {});
-    return requestBuilder('IntentRequest', {
+    return requestBuilder(RequestType.Intent, {
         name: name,
         slots: (slots) ? transformedSlots : undefined
     }, isNew, attrs, appId);

@@ -11,9 +11,15 @@
         "moduleResolution": "classic"
     },
     "files": [
+      "lib/data/built-in-intents-map.ts",
+      "lib/data/built-in-slots-map.ts",
+      "lib/interfaces/iaction.ts",
+      "lib/interfaces/iapp",
+      "lib/interfaces/iapp-handlers",
+      "lib/interfaces/iapp-options",
+      "lib/interfaces/irequest",
+      "lib/interfaces/iresponse",
       "lib/alexia.ts",
-      "lib/built-in-intents-map.ts",
-      "lib/built-in-slots-map.ts",
       "lib/create-app.ts",
       "lib/create-custom-slot.ts",
       "lib/create-intent.ts",

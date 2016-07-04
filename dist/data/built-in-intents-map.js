@@ -1,6 +1,5 @@
 'use strict';
-
-export = {
+const builtInIntents = {
     cancel: 'AMAZON.CancelIntent',
     help: 'AMAZON.HelpIntent',
     next: 'AMAZON.NextIntent',
@@ -13,3 +12,4 @@ export = {
     stop: 'AMAZON.StopIntent',
     yes: 'AMAZON.YesIntent',
 };
+module.exports = builtInIntents;

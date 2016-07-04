@@ -1,17 +1,17 @@
 'use strict';
 import _ = require('lodash');
-import builtInSlotsMap = require('./built-in-slots-map');
+import builtInSlotsMap = require('./data/built-in-slots-map');
 import validator = require('./validator');
 
-const builtInSlotsValues = _.values(builtInSlotsMap);
+const builtInSlotsValues: string[] = _.values(builtInSlotsMap);
 
 /**
  * Creates custom slot. Checks if custom slot name is not conflicting with amazon built in slots
  * @param {Object} customSlots - Map of custom slot names to custom slots
- * @param {string} name - Name of the custom slot 
+ * @param {string} name - Name of the custom slot
  * @param {string[]} samples - Array of custom slot samples
  */
-const createCustomSlot = (customSlots, name, samples) => {
+const createCustomSlot = (customSlots, name: string, samples: string[]) => {
 
     if(customSlots[name]) {
         throw new Error(`Slot with name ${name} is already defined`);

@@ -1,4 +1,5 @@
 'use strict';
+//NOTE - jsdoc
 const isNameValid = (name) => /^[a-zA-Z]+$/.test(name);
 /**
  * @returns {boolean} whether given utterance is correct or not.

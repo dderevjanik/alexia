@@ -1,9 +1,10 @@
 'use strict';
 const _ = require('lodash');
 const bases = require('bases');
-const builtInSlotsMap = require('./built-in-slots-map');
-const builtInIntentsMap = require('./built-in-intents-map');
+const builtInSlotsMap = require('./data/built-in-slots-map');
+const builtInIntentsMap = require('./data/built-in-intents-map');
 const validator = require('./validator');
+//NOTE - jsdoc
 const generateIntentName = (intents) => {
     let position = 0;
     let generatedName;
@@ -12,6 +13,7 @@ const generateIntentName = (intents) => {
         ;
     return generatedName;
 };
+//NOTE - jsdoc
 const findUtteranceMatches = (utterance) => {
     // Example: for 'move forward by {value:Number}' we get:
     // [[ '{value:Number}', 'value', 'Number', index: 16, input: 'move forward by {value:Number}' ]]
@@ -23,10 +25,12 @@ const findUtteranceMatches = (utterance) => {
     }
     return allMatches;
 };
+//NOTE - jsdoc
 const transformSlotType = (type) => {
     const transformedType = builtInSlotsMap[type];
     return transformedType ? transformedType : type;
 };
+//NOTE - jsdoc
 const parseRichUtterances = (richUtterances, slots, utterances) => {
     // Iterate over each rich utterance and transform it by removing slots description
     _.each(richUtterances, function (utterance) {
@@ -58,7 +62,7 @@ const parseRichUtterances = (richUtterances, slots, utterances) => {
  */
 const createIntent = (intents, name, richUtterances, handler) => {
     // Convert utterances to array
-    richUtterances = _.isArray(richUtterances) ? richUtterances : [richUtterances];
+    const arrRichUtterances = (_.isArray(richUtterances) ? richUtterances : [richUtterances]);
     // If intent name is not specified, try to generate unique one
     if (!name) {
         name = generateIntentName(intents);
@@ -73,7 +77,7 @@ const createIntent = (intents, name, richUtterances, handler) => {
     // Transformed slots and utterances from richUtterances
     const slots = [];
     const utterances = [];
-    parseRichUtterances(richUtterances, slots, utterances);
+    parseRichUtterances(arrRichUtterances, slots, utterances);
     return {
         name: name,
         slots: slots,

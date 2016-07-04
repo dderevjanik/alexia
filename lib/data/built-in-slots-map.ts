@@ -1,6 +1,6 @@
 'use strict';
 
-export = {
+const builtInSlots = {
     Date: 'AMAZON.DATE',
     Duration: 'AMAZON.DURATION',
     FourDigitNumber: 'AMAZON.FOUR_DIGIT_NUMBER',
@@ -11,3 +11,5 @@ export = {
     USState: 'AMAZON.US_STATE',
     Literal: 'AMAZON.LITERAL',
 };
+
+export = builtInSlots;

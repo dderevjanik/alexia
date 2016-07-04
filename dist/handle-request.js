@@ -1,5 +1,6 @@
 'use strict';
 const _ = require('lodash');
+const RequestType = require('./data/request-type');
 /**
  * Creates output speech object used for text response or reprompt
  * @param {string} text - Text or Speech Synthesis Markup (see sendResponse docs)
@@ -146,10 +147,10 @@ const handleRequest = (app, request, handlers, done) => {
     }
     const requestType = request.request.type;
     switch (requestType) {
-        case 'LaunchRequest':
+        case RequestType.Launch:
             callHandler(handlers.onStart, null, request.session.attributes, app, done);
             break;
-        case 'IntentRequest':
+        case RequestType.Intent:
             const intentName = request.request.intent.name;
             const intent = app.intents[request.request.intent.name];
             if (!intent) {
@@ -157,7 +158,7 @@ const handleRequest = (app, request, handlers, done) => {
             }
             checkActionsAndHandle(intent, request.request.intent.slots, request.session.attributes, app, handlers, done);
             break;
-        case 'SessionEndedRequest':
+        case RequestType.SessionEnd:
             callHandler(handlers.onEnd, null, request.session.attributes, app, done);
             break;
         default:

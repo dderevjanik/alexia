@@ -7,7 +7,7 @@ import _ = require('lodash');
  * @param {object} data
  * @returns {string}
  */
-const createAsset = (type, data) => `${type}:\n${data}\n\n`;
+const createAsset = (type: string, data) => `${type}:\n${data}\n\n`;
 
 /**
  * @param {object} assets
@@ -27,7 +27,7 @@ const createStringifyAssets = (assets) => () => {
 };
 
 /**
- * Generates intent schema JSON string 
+ * Generates intent schema JSON string
  * @return {string} strigified intent schema object generated from intents
  */
 const genIntentSchema = (intents) => {

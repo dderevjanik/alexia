@@ -1,6 +1,7 @@
 'use strict';
 
-const isNameValid = (name) => /^[a-zA-Z]+$/.test(name);
+//NOTE - jsdoc
+const isNameValid = (name: string): boolean => /^[a-zA-Z]+$/.test(name);
 
 /**
  * @returns {boolean} whether given utterance is correct or not.
@@ -9,7 +10,7 @@ const isNameValid = (name) => /^[a-zA-Z]+$/.test(name);
  * possesive apostrophes, hyphens and brackets for slots.
  * @see https://developer.amazon.com/appsandservices/solutions/alexa/alexa-skills-kit/docs/defining-the-voice-interface
  */
-const isUtteranceValid = (utterance) => /^[a-z\s\.'\-\{\}]*$/gmi.test(utterance);
+const isUtteranceValid = (utterance): boolean => /^[a-z\s\.'\-\{\}]*$/gmi.test(utterance);
 
 export = {
     isNameValid: isNameValid,

@@ -1,10 +1,12 @@
 'use strict';
 import _ = require('lodash');
+import RequestType = require('./data/request-type')
 
 /**
  * Creates simple Alexa request
  */
-const requestBuilder = (requestType, intent, isNew, attrs, appId) => {
+const requestBuilder = (requestType: string, intent: {}, isNew: boolean, attrs: {}, appId: string) => {
+//NOTE - interfaces
 
     const request = {
         session: {
@@ -34,16 +36,16 @@ const requestBuilder = (requestType, intent, isNew, attrs, appId) => {
  * @param {Object} attrs - Session attributes
  * @param {String} [appId] - Application id
  */
-const launchRequest = (attrs, appId) =>
-    requestBuilder('LaunchRequest', null, true, attrs, appId);
+const launchRequest = (attrs: {}, appId: string) =>
+    requestBuilder(RequestType.Launch, null, true, attrs, appId);
 
 /**
  * Creates SessionEndedRequest
  * @param {Object} attrs - Session attributes
  * @param {String} [appId] - Application id
  */
-const sessionEndedRequest = (attrs, appId) =>
-    requestBuilder('SessionEndedRequest', null, false, attrs, appId);
+const sessionEndedRequest = (attrs: {}, appId: string) =>
+    requestBuilder(RequestType.SessionEnd, null, false, attrs, appId);
 
 /**
  * Creates IntentRequest
@@ -53,7 +55,7 @@ const sessionEndedRequest = (attrs, appId) =>
  * @param {boolean} [isNew] - Whether session is new. Defaults to false
  * @param {String} [appId] - Application id
  */
-const intentRequest = (name, slots, attrs, isNew, appId) => {
+const intentRequest = (name: string, slots: {}, attrs: {}, isNew: boolean, appId: string) => {
 
     // Transform slots from minimal schema into slot schema sent by Amazon
     const transformedSlots = _.transform(slots, (result, key, value) => {
@@ -63,7 +65,7 @@ const intentRequest = (name, slots, attrs, isNew, appId) => {
         };
     }, {});
 
-    return requestBuilder('IntentRequest', {
+    return requestBuilder(RequestType.Intent, {
         name: name,
         slots: (slots) ? transformedSlots : undefined
     }, isNew, attrs, appId);

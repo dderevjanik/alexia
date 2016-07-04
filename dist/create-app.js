@@ -4,7 +4,7 @@ const handleRequest = require('./handle-request');
 const createIntent = require('./create-intent');
 const createCustomSlot = require('./create-custom-slot');
 const generateSpeechAssets = require('./generate-speech-assets');
-const builtInIntentsMap = require('./built-in-intents-map');
+const builtInIntentsMap = require('./data/built-in-intents-map');
 const builtInIntentsList = _.keys(builtInIntentsMap).join(', ');
 /**
  * Create new app
@@ -19,7 +19,16 @@ const createApp = (name, options) => {
         options: options,
         intents: {},
         customSlots: {},
-        actions: []
+        actions: [],
+        onStart: (handler) => null,
+        onEnd: (handler) => null,
+        defaultActionFail: (handler) => null,
+        intent: (name, richUtterances, handler) => null,
+        builtInIntent: (name, utterances, handler) => null,
+        handle: (request, done) => null,
+        customSlot: (name, samples) => null,
+        action: (action) => null,
+        speechAssets: () => null
     };
     const handlers = {
         onStart: () => ('Welcome'),
@@ -104,6 +113,7 @@ const createApp = (name, options) => {
         app.actions.push({
             from: typeof (action.from) === 'string' ? action.from : action.from.name,
             to: typeof (action.to) === 'string' ? action.to : action.to.name,
+            //NOTE - what about pass or done ?
             if: action.if,
             fail: action.fail
         });

@@ -4,9 +4,12 @@ import handleRequest = require('./handle-request');
 import createIntent = require('./create-intent');
 import createCustomSlot = require('./create-custom-slot');
 import generateSpeechAssets = require('./generate-speech-assets');
-import builtInIntentsMap = require('./built-in-intents-map');
+import builtInIntentsMap = require('./data/built-in-intents-map');
+import IAction = require('./interfaces/iaction');
+import IAppHandlers = require('./interfaces/iapp-handlers');
+import IAppOptions = require('./interfaces/iapp-options');
 
-const builtInIntentsList = _.keys(builtInIntentsMap).join(', ');
+const builtInIntentsList: string[] = _.keys(builtInIntentsMap).join(', ');
 
 /**
  * Create new app
@@ -15,17 +18,26 @@ const builtInIntentsList = _.keys(builtInIntentsMap).join(', ');
  * @param {string} [options.version] - App version
  * @param {string[]} [options.ids] - Array of app ids. Only requests with supported app ids will be handled
  */
-const createApp = (name, options) => {
+const createApp = (name: string, options: IAppOptions) => {
 
     const app = {
         name: name,
         options: options,
         intents: {},
         customSlots: {},
-        actions: []
+        actions: [],
+        onStart: (handler: () => string) => null,
+        onEnd: (handler: () => string) => null,
+        defaultActionFail: (handler: () => string) => null,
+        intent: (name: string, richUtterances: string|string[], handler: () => void) => null,
+        builtInIntent: (name:string, utterances: string|string[], handler: () => void) => null,
+        handle: (request, done: () => void) => null,
+        customSlot: (name: string, samples: string[]) => null,
+        action: (action) => null,
+        speechAssets: () => null
     };
 
-    const handlers = {
+    const handlers: IAppHandlers = {
         onStart: () => ('Welcome'),
         onEnd: () => ('Bye'),
         defaultActionFail: () => ('Sorry, your command is invalid')
@@ -35,7 +47,7 @@ const createApp = (name, options) => {
      * Sets handler to be called on application start
      * @param {function} handler - Handler to be called when app is started without intent
      */
-    app.onStart = (handler) => {
+    app.onStart = (handler: () => string) => {
         handlers.onStart = handler;
     };
 
@@ -43,7 +55,7 @@ const createApp = (name, options) => {
      * Sets handler to be called on application end
      * @param {function} handler - Handler to be called when application is unexpectedly terminated
      */
-    app.onEnd = (handler) => {
+    app.onEnd = (handler: () => string) => {
         handlers.onEnd = handler;
     };
 
@@ -51,7 +63,7 @@ const createApp = (name, options) => {
      * Sets handler to be called on default action fail
      * @param {function} handler - Default handler to be called when action can not be invoked
      */
-    app.defaultActionFail = (handler) => {
+    app.defaultActionFail = (handler: () => string) => {
         handlers.defaultActionFail = handler;
     };
 
@@ -61,7 +73,7 @@ const createApp = (name, options) => {
      * @param {(string|string[])} richUtterances - one or more utterances. Utterances contain utterance description with slots types. Example: `My age is {age:Number}`
      * @param {function} handler - Function to be called when intent is invoked
      */
-    app.intent = (name, richUtterances, handler) => {
+    app.intent = (name: string, richUtterances: string|string[], handler: () => void) => {
         const intent = createIntent(app.intents, name, richUtterances, handler);
         app.intents[intent.name] = intent;
 
@@ -75,7 +87,7 @@ const createApp = (name, options) => {
      * @param {(string|string[]|function)} [utterances] - one or more utterances without slots. Could be ommited and handler could be 2nd parameter instead
      * @param {function} handler - Function to be called when intent is invoked
      */
-    app.builtInIntent = (name, utterances, handler) => {
+    app.builtInIntent = (name:string, utterances: string|string[], handler: () => void) => {
         // Validate built-in intent name
         if(!builtInIntentsMap[name]) {
             throw new Error(`Built-in Intent name ${name} is invalid. Please use one of: ${builtInIntentsList}`);
@@ -95,7 +107,7 @@ const createApp = (name, options) => {
      * @param {Object} request - Request JSON to be handled.
      * @param {Function} done - Callback to be called when request is handled. Callback is called with one argument - response JSON
      */
-    app.handle = (request, done) =>
+    app.handle = (request, done: () => void) =>
         handleRequest(app, request, handlers, done);
 
     /**
@@ -103,7 +115,7 @@ const createApp = (name, options) => {
      * @param {string} name - Name of the custom slot
      * @param {string[]} samples - Array of custom slot samples
      */
-    app.customSlot = (name, samples) => {
+    app.customSlot = (name: string, samples: string[]) => {
         const customSlot = createCustomSlot(app.customSlots, name, samples);
         app.customSlots[name] = customSlot;
     };
@@ -116,10 +128,11 @@ const createApp = (name, options) => {
      * @param {function} action.if - Function returning boolean whether this transition should be handled.
      * @param {function} action.fail - Handler to be called if `action.if` returned `false`
      */
-    app.action = (action) => {
+    app.action = (action: IAction) => {
         app.actions.push({
             from: typeof(action.from) === 'string' ? action.from : action.from.name,
             to: typeof(action.to) === 'string' ? action.to : action.to.name,
+            //NOTE - what about pass or done ?
             if: action.if,
             fail: action.fail
         });

@@ -1,5 +1,5 @@
 declare var _default: {
-    isNameValid: (name: any) => boolean;
+    isNameValid: (name: string) => boolean;
     isUtteranceValid: (utterance: any) => boolean;
 };
 export = _default;

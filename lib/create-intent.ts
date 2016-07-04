@@ -1,10 +1,11 @@
 'use strict';
 import _ = require('lodash');
 import bases = require('bases');
-import builtInSlotsMap = require('./built-in-slots-map');
-import builtInIntentsMap = require('./built-in-intents-map');
+import builtInSlotsMap = require('./data/built-in-slots-map');
+import builtInIntentsMap = require('./data/built-in-intents-map');
 import validator = require('./validator');
 
+//NOTE - jsdoc
 const generateIntentName = (intents) => {
     let position = 0;
     let generatedName;
@@ -15,6 +16,7 @@ const generateIntentName = (intents) => {
     return generatedName;
 };
 
+//NOTE - jsdoc
 const findUtteranceMatches = (utterance) => {
   // Example: for 'move forward by {value:Number}' we get:
   // [[ '{value:Number}', 'value', 'Number', index: 16, input: 'move forward by {value:Number}' ]]
@@ -29,12 +31,14 @@ const findUtteranceMatches = (utterance) => {
   return allMatches;
 };
 
+//NOTE - jsdoc
 const transformSlotType = (type) => {
     const transformedType = builtInSlotsMap[type];
     return transformedType ? transformedType : type;
 };
 
-const parseRichUtterances = (richUtterances, slots, utterances) => {
+//NOTE - jsdoc
+const parseRichUtterances = (richUtterances: string[], slots, utterances) => {
     // Iterate over each rich utterance and transform it by removing slots description
     _.each(richUtterances, function(utterance) {
         const matches = findUtteranceMatches(utterance);
@@ -68,9 +72,9 @@ const parseRichUtterances = (richUtterances, slots, utterances) => {
  * @param {(string|string[])} richUtterances - Utterance or array of rich utterances
  * @param {function} handler - Function to be called when intent is invoked
  */
-const createIntent = (intents, name, richUtterances, handler) => {
+const createIntent = (intents, name: string, richUtterances: string | string[], handler) => {
     // Convert utterances to array
-    richUtterances = _.isArray(richUtterances) ? richUtterances : [richUtterances];
+    const arrRichUtterances = <string[]> (_.isArray(richUtterances) ? richUtterances : [richUtterances]);
 
     // If intent name is not specified, try to generate unique one
     if(!name) {
@@ -88,7 +92,7 @@ const createIntent = (intents, name, richUtterances, handler) => {
     const slots = [];
     const utterances = [];
 
-    parseRichUtterances(richUtterances, slots, utterances);
+    parseRichUtterances(arrRichUtterances, slots, utterances);
 
     return {
         name: name,

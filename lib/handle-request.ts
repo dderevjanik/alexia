@@ -1,5 +1,6 @@
 'use strict';
 import _ = require('lodash');
+import RequestType = require('./data/request-type');
 
 /**
  * Creates output speech object used for text response or reprompt
@@ -154,7 +155,7 @@ const handleRequest = (app, request, handlers, done) => {
     const options = app.options;
 
     // Application ids is specified and does not contain app id in request
-    if(options && options.ids && options.ids.length > 0 && options.ids.indexOf(appId) === -1) {
+    if(options && options.ids && (options.ids.length > 0) && (options.ids.indexOf(appId) === -1)) {
         throw new Error('Application id is not valid');
     }
 
@@ -170,11 +171,11 @@ const handleRequest = (app, request, handlers, done) => {
 
     switch (requestType) {
 
-        case 'LaunchRequest':
+        case RequestType.Launch:
             callHandler(handlers.onStart, null, request.session.attributes, app, done);
             break;
 
-        case 'IntentRequest':
+        case RequestType.Intent:
             const intentName = request.request.intent.name;
             const intent = app.intents[request.request.intent.name];
 
@@ -185,7 +186,7 @@ const handleRequest = (app, request, handlers, done) => {
             checkActionsAndHandle(intent, request.request.intent.slots, request.session.attributes, app, handlers, done);
             break;
 
-        case 'SessionEndedRequest':
+        case RequestType.SessionEnd:
             callHandler(handlers.onEnd, null, request.session.attributes, app, done);
             break;
 

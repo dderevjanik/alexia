@@ -1,59 +1,59 @@
 declare var _default: {
-    launchRequest: (attrs: any, appId: any) => {
+    launchRequest: (attrs: {}, appId: string) => {
         session: {
-            attributes: any;
+            attributes: {};
             sessionId: string;
             application: {
-                applicationId: any;
+                applicationId: string;
             };
             user: {
                 userId: string;
             };
-            new: any;
+            new: boolean;
         };
         request: {
-            type: any;
+            type: string;
             requestId: string;
             timestamp: string;
-            intent: any;
+            intent: {};
         };
     };
-    sessionEndedRequest: (attrs: any, appId: any) => {
+    sessionEndedRequest: (attrs: {}, appId: string) => {
         session: {
-            attributes: any;
+            attributes: {};
             sessionId: string;
             application: {
-                applicationId: any;
+                applicationId: string;
             };
             user: {
                 userId: string;
             };
-            new: any;
+            new: boolean;
         };
         request: {
-            type: any;
+            type: string;
             requestId: string;
             timestamp: string;
-            intent: any;
+            intent: {};
         };
     };
-    intentRequest: (name: any, slots: any, attrs: any, isNew: any, appId: any) => {
+    intentRequest: (name: string, slots: {}, attrs: {}, isNew: boolean, appId: string) => {
         session: {
-            attributes: any;
+            attributes: {};
             sessionId: string;
             application: {
-                applicationId: any;
+                applicationId: string;
             };
             user: {
                 userId: string;
             };
-            new: any;
+            new: boolean;
         };
         request: {
-            type: any;
+            type: string;
             requestId: string;
             timestamp: string;
-            intent: any;
+            intent: {};
         };
     };
 };

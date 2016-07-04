@@ -1,6 +1,6 @@
 'use strict';
 const _ = require('lodash');
-const builtInSlotsMap = require('./built-in-slots-map');
+const builtInSlotsMap = require('./data/built-in-slots-map');
 const validator = require('./validator');
 const builtInSlotsValues = _.values(builtInSlotsMap);
 /**
