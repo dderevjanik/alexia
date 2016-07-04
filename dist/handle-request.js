@@ -18,6 +18,40 @@ const createOutputSpeechObject = (text, ssml) => {
     }
     return outputSpeech;
 };
+/**
+ * Creates card object and wraps it with card type
+ * @param {Object} card - Card object from responseData options
+ * @returns {Object} card - Card object with type, title and content or undefined if card is not specified
+ */
+const createCardObject = (card) => (card) ? { type: 'Simple', title: card.title, content: card.content } : undefined;
+const createResponse = (options, slots, attrs, app) => {
+    // Convert text options to object
+    if (typeof (options) === 'string') {
+        options = {
+            text: options
+        };
+    }
+    // Create outputSpeech object for text or ssml
+    const outputSpeech = createOutputSpeechObject(options.text, options.ssml);
+    const responseObject = {
+        version: app.options ? app.options.version : '0.0.1',
+        sessionAttributes: options.attrs ? options.attrs : attrs,
+        response: {
+            outputSpeech: outputSpeech,
+            shouldEndSession: options.end || false
+        }
+    };
+    if (options.reprompt) {
+        responseObject.response.reprompt = {
+            outputSpeech: createOutputSpeechObject(options.reprompt, options.ssml)
+        };
+    }
+    const card = createCardObject(options.card);
+    if (card) {
+        responseObject.response.card = card;
+    }
+    return responseObject;
+};
 const callHandler = (handler, slots, attrs, app, done) => {
     // Transform slots into simple key:value schema
     slots = _.transform(slots, (result, value) => {
@@ -89,40 +123,6 @@ const checkActionsAndHandle = (intent, slots, attrs, app, handlers, done) => {
     }
 };
 /**
- * Creates card object and wraps it with card type
- * @param {Object} card - Card object from responseData options
- * @returns {Object} card - Card object with type, title and content or undefined if card is not specified
- */
-const createCardObject = (card) => (card) ? { type: 'Simple', title: card.title, content: card.content } : undefined;
-const createResponse = (options, slots, attrs, app) => {
-    // Convert text options to object
-    if (typeof (options) === 'string') {
-        options = {
-            text: options
-        };
-    }
-    // Create outputSpeech object for text or ssml
-    const outputSpeech = createOutputSpeechObject(options.text, options.ssml);
-    const responseObject = {
-        version: app.options ? app.options.version : '0.0.1',
-        sessionAttributes: options.attrs ? options.attrs : attrs,
-        response: {
-            outputSpeech: outputSpeech,
-            shouldEndSession: options.end || false
-        }
-    };
-    if (options.reprompt) {
-        responseObject.response.reprompt = {
-            outputSpeech: createOutputSpeechObject(options.reprompt, options.ssml)
-        };
-    }
-    const card = createCardObject(options.card);
-    if (card) {
-        responseObject.response.card = card;
-    }
-    return responseObject;
-};
-/**
  * Handles request and calls done when finished
  * @param {Object} app - Application object
  * @param {Object} request - Request JSON to be handled
@@ -132,7 +132,6 @@ const createResponse = (options, slots, attrs, app) => {
 const handleRequest = (app, request, handlers, done) => {
     const appId = request.session.application.applicationId;
     const options = app.options;
-    const intents = _.values(app.intents);
     // Application ids is specified and does not contain app id in request
     if (options && options.ids && options.ids.length > 0 && options.ids.indexOf(appId) === -1) {
         throw new Error('Application id is not valid');

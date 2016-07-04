@@ -20,19 +20,19 @@ const findUtteranceMatches = (utterance) => {
   // [[ '{value:Number}', 'value', 'Number', index: 16, input: 'move forward by {value:Number}' ]]
   const myregex = /{(.*?):(.*?)\}/gmi;
   const allMatches = [];
-  
-  let result; 
-  while((result = myregex.exec(utterance)) != null) {
+
+  let result;
+  while((result = myregex.exec(utterance)) !== null) {
       allMatches.push(result);
   }
 
   return allMatches;
-}
+};
 
 const transformSlotType = (type) => {
     const transformedType = builtInSlotsMap[type];
     return transformedType ? transformedType : type;
-}
+};
 
 const parseRichUtterances = (richUtterances, slots, utterances) => {
     // Iterate over each rich utterance and transform it by removing slots description
@@ -57,7 +57,7 @@ const parseRichUtterances = (richUtterances, slots, utterances) => {
         } else {
             throw new Error(`Error: Sample utterance: '${utterance}' is not valid. Each sample utterance must consist only of alphabet characters, spaces, dots, hyphens, brackets and single quotes`);
         }
-       
+
     });
 };
 
@@ -88,7 +88,7 @@ const createIntent = (intents, name, richUtterances, handler) => {
     const slots = [];
     const utterances = [];
 
-    parseRichUtterances(richUtterances, slots, utterances)
+    parseRichUtterances(richUtterances, slots, utterances);
 
     return {
         name: name,
@@ -96,6 +96,6 @@ const createIntent = (intents, name, richUtterances, handler) => {
         utterances: utterances,
         handler: handler
     };
-}
+};
 
 export = createIntent;

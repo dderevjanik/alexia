@@ -18,7 +18,7 @@ const findUtteranceMatches = (utterance) => {
     const myregex = /{(.*?):(.*?)\}/gmi;
     const allMatches = [];
     let result;
-    while ((result = myregex.exec(utterance)) != null) {
+    while ((result = myregex.exec(utterance)) !== null) {
         allMatches.push(result);
     }
     return allMatches;

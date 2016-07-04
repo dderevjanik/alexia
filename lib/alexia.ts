@@ -1,6 +1,6 @@
 'use strict';
-const createApp = require('./create-app');
-const createRequest = require('./create-request');
+import createApp = require('./create-app');
+import createRequest = require('./create-request');
 
 export = {
     createApp: createApp,

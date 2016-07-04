@@ -22,9 +22,9 @@ const createApp = (name, options) => {
         actions: []
     };
     const handlers = {
-        onStart: () => 'Welcome',
-        onEnd: () => 'Bye',
-        defaultActionFail: () => 'Sorry, your command is invalid'
+        onStart: () => ('Welcome'),
+        onEnd: () => ('Bye'),
+        defaultActionFail: () => ('Sorry, your command is invalid')
     };
     /**
      * Sets handler to be called on application start
@@ -76,13 +76,13 @@ const createApp = (name, options) => {
             utterances = undefined;
         }
         app.intent(name, utterances, handler);
-    },
-        /**
-         * Handles request and calls done when finished
-         * @param {Object} request - Request JSON to be handled.
-         * @param {Function} done - Callback to be called when request is handled. Callback is called with one argument - response JSON
-         */
-        app.handle = (request, done) => handleRequest(app, request, handlers, done);
+    };
+    /**
+     * Handles request and calls done when finished
+     * @param {Object} request - Request JSON to be handled.
+     * @param {Function} done - Callback to be called when request is handled. Callback is called with one argument - response JSON
+     */
+    app.handle = (request, done) => handleRequest(app, request, handlers, done);
     /**
      * Creates custom slot
      * @param {string} name - Name of the custom slot

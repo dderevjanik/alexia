@@ -5,7 +5,7 @@
   "main": "dist/alexia.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dderevjanik/alexia.git"
+    "url": "git+https://github.com/dderevjanik/alexia"
   },
   "author": {
     "name": "Matthew D. Lancaster",
@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "lint": "eslint .",
+    "lint": "tslint lib/**/*.ts",
     "lint:fix": "npm run lint -- --fix",
     "test": "istanbul cover node_modules/mocha/bin/_mocha -- -u exports --reporter spec",
     "test-lcov": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- -u exports --reporter spec",
@@ -35,10 +35,11 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "eslint": "^2.13.0",
     "istanbul": "^0.4.3",
     "mocha": "^2.5.3",
-    "nodemon": "^1.9.2"
+    "nodemon": "^1.9.2",
+    "tslint": "^3.13.0",
+    "typescript": "^1.8.10"
   },
   "engines": {
     "node": ">=4.2.0"

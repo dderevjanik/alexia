@@ -3,7 +3,6 @@ import _ = require('lodash');
 import handleRequest = require('./handle-request');
 import createIntent = require('./create-intent');
 import createCustomSlot = require('./create-custom-slot');
-import createRequest = require('./create-request');
 import generateSpeechAssets = require('./generate-speech-assets');
 import builtInIntentsMap = require('./built-in-intents-map');
 
@@ -16,8 +15,8 @@ const builtInIntentsList = _.keys(builtInIntentsMap).join(', ');
  * @param {string} [options.version] - App version
  * @param {string[]} [options.ids] - Array of app ids. Only requests with supported app ids will be handled
  */
-const createApp = (name, options) => {   
-    
+const createApp = (name, options) => {
+
     const app = {
         name: name,
         options: options,
@@ -27,9 +26,9 @@ const createApp = (name, options) => {
     };
 
     const handlers = {
-        onStart: () => 'Welcome',
-    	onEnd: () => 'Bye',
-        defaultActionFail: () => 'Sorry, your command is invalid'
+        onStart: () => ('Welcome'),
+        onEnd: () => ('Bye'),
+        defaultActionFail: () => ('Sorry, your command is invalid')
     };
 
     /**
@@ -42,7 +41,7 @@ const createApp = (name, options) => {
 
     /**
      * Sets handler to be called on application end
-     * @param {function} handler - Handler to be called when application is unexpectedly terminated 
+     * @param {function} handler - Handler to be called when application is unexpectedly terminated
      */
     app.onEnd = (handler) => {
         handlers.onEnd = handler;
@@ -50,12 +49,12 @@ const createApp = (name, options) => {
 
     /**
      * Sets handler to be called on default action fail
-     * @param {function} handler - Default handler to be called when action can not be invoked 
+     * @param {function} handler - Default handler to be called when action can not be invoked
      */
     app.defaultActionFail = (handler) => {
         handlers.defaultActionFail = handler;
     };
-    
+
     /**
      * Creates intent
      * @param {string} name - Intent name. Should not be equal to built-in intent name. It is possible to use this function to create built-in intents but utterances are required argument and you need to specify full built-in intent name f.e. `AMAZON.StopIntent`. See `{@link app.builtInIntent}`. If not specified (null, undefined or empty string), automatically generated intent name is used but we recommend to name each intent
@@ -89,11 +88,11 @@ const createApp = (name, options) => {
         }
 
         app.intent(name, utterances, handler);
-    },
+    };
 
     /**
      * Handles request and calls done when finished
-     * @param {Object} request - Request JSON to be handled. 
+     * @param {Object} request - Request JSON to be handled.
      * @param {Function} done - Callback to be called when request is handled. Callback is called with one argument - response JSON
      */
     app.handle = (request, done) =>
@@ -101,7 +100,7 @@ const createApp = (name, options) => {
 
     /**
      * Creates custom slot
-     * @param {string} name - Name of the custom slot 
+     * @param {string} name - Name of the custom slot
      * @param {string[]} samples - Array of custom slot samples
      */
     app.customSlot = (name, samples) => {

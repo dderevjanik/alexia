@@ -1,5 +1,10 @@
 language: node_js
 node_js:
   - 4.2.0
-script: "npm run test-lcov"
-after_script: "npm install coveralls && cat ./coverage/lcov.info | coveralls"
+script:
+  - npm install -g typescript tslint
+  - npm run lint
+  - npm run build
+  - npm run test-lcov
+after_script: 
+  - npm install coveralls && cat ./coverage/lcov.info | coveralls
