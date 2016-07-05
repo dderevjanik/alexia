@@ -27,7 +27,6 @@ const createCardObject = (card) =>
     (card) ? { type: 'Simple', title: card.title, content: card.content } : undefined;
 
 const createResponse = (options, slots, attrs, app): IResponse => {
-
     // Convert text options to object
     if(typeof(options) === 'string') {
         options = {
@@ -37,7 +36,6 @@ const createResponse = (options, slots, attrs, app): IResponse => {
 
     // Create outputSpeech object for text or ssml
     const outputSpeech: IOutputSpeech = createOutputSpeechObject(options.text, options.ssml);
-
     const responseObject = {
         version: (app.options) ? app.options.version : '0.0.1',
         sessionAttributes: (options.attrs) ? options.attrs : attrs,
@@ -51,7 +49,6 @@ const createResponse = (options, slots, attrs, app): IResponse => {
         responseObject.response.reprompt = {
             outputSpeech: createOutputSpeechObject(options.reprompt, options.ssml)
         };
-
     }
 
     const card = createCardObject(options.card);
