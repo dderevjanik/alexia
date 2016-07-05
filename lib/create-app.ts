@@ -73,7 +73,7 @@ const createApp = (name: string, options: IAppOptions) => {
      * @param {(string|string[])} richUtterances - one or more utterances. Utterances contain utterance description with slots types. Example: `My age is {age:Number}`
      * @param {function} handler - Function to be called when intent is invoked
      */
-    app.intent = (name: string, richUtterances: string|string[], handler: () => void) => {
+    app.intent = (name: string, richUtterances: string|string[], handler: (slots: any) => string) => {
         const intent = createIntent(app.intents, name, richUtterances, handler);
         app.intents[intent.name] = intent;
 

@@ -1,5 +1,6 @@
 'use strict';
 import _ = require('lodash');
+import ISpeechAssets = require('./interfaces/ispeech-assets');
 
 /**
  * Creates stringified part of speechAssets
@@ -83,7 +84,7 @@ const genCustomSlots = (customSlots) => {
     return allCustomSlotSamples;
 };
 
-const generateSpeech = (app) => {
+const generateSpeech = (app): ISpeechAssets => {
     const assets = {
         intentSchema: genIntentSchema(app.intents),
         utterances: genUtterances(app.intents),

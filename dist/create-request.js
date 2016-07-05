@@ -5,6 +5,7 @@ const RequestType = require('./data/request-type');
  * Creates simple Alexa request
  */
 const requestBuilder = (requestType, intent, isNew, attrs, appId) => {
+    //NOTE - interfaces
     const request = {
         session: {
             attributes: attrs || {},

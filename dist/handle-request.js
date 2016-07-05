@@ -8,15 +8,9 @@ const RequestType = require('./data/request-type');
  * @returns {Object} outputSpeechObject in one of text or ssml formats
  */
 const createOutputSpeechObject = (text, ssml) => {
-    const outputSpeech = {};
-    if (!ssml) {
-        outputSpeech.type = 'PlainText';
-        outputSpeech.text = text;
-    }
-    else {
-        outputSpeech.type = 'SSML';
-        outputSpeech.ssml = text;
-    }
+    const outputSpeech = (!ssml)
+        ? { type: 'PlainText', text: text }
+        : { type: 'SSML', ssml: text };
     return outputSpeech;
 };
 /**
@@ -35,8 +29,8 @@ const createResponse = (options, slots, attrs, app) => {
     // Create outputSpeech object for text or ssml
     const outputSpeech = createOutputSpeechObject(options.text, options.ssml);
     const responseObject = {
-        version: app.options ? app.options.version : '0.0.1',
-        sessionAttributes: options.attrs ? options.attrs : attrs,
+        version: (app.options) ? app.options.version : '0.0.1',
+        sessionAttributes: (options.attrs) ? options.attrs : attrs,
         response: {
             outputSpeech: outputSpeech,
             shouldEndSession: options.end || false
@@ -134,7 +128,7 @@ const handleRequest = (app, request, handlers, done) => {
     const appId = request.session.application.applicationId;
     const options = app.options;
     // Application ids is specified and does not contain app id in request
-    if (options && options.ids && options.ids.length > 0 && options.ids.indexOf(appId) === -1) {
+    if (options && options.ids && (options.ids.length > 0) && (options.ids.indexOf(appId) === -1)) {
         throw new Error('Application id is not valid');
     }
     if (request.session.new) {

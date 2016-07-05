@@ -1,8 +1,12 @@
+import IOutputSpeech = require('./ioutputspeech');
 interface IResponse {
-    outputSpeech: {
-        type: string;
-        text: string;
+    version: string;
+    sessionAtributes: any;
+    response: {
+        card: any;
+        outputSpeech: IOutputSpeech;
+        reprompt: any;
+        shouldEndSession: boolean;
     };
-    shouldEndSession: boolean;
 }
 export = IResponse;

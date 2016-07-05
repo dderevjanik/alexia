@@ -1,6 +1,3 @@
-declare const generateSpeech: (app: any) => {
-    intentSchema: string;
-    utterances: string;
-    customSlots: {};
-};
+import ISpeechAssets = require('./interfaces/ispeech-assets');
+declare const generateSpeech: (app: any) => ISpeechAssets;
 export = generateSpeech;

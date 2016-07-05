@@ -1,6 +1,9 @@
 'use strict';
 import _ = require('lodash');
 import RequestType = require('./data/request-type');
+import IAppHandlers = require('./interfaces/iapp-handlers');
+import IOutputSpeech = require('./interfaces/ioutputspeech');
+import IResponse = require('./interfaces/iresponse');
 
 /**
  * Creates output speech object used for text response or reprompt
@@ -8,15 +11,10 @@ import RequestType = require('./data/request-type');
  * @param {bool} ssml - Whether to use ssml
  * @returns {Object} outputSpeechObject in one of text or ssml formats
  */
-const createOutputSpeechObject = (text, ssml) => {
-    const outputSpeech = {};
-    if(!ssml) {
-        outputSpeech.type = 'PlainText';
-        outputSpeech.text = text;
-    } else {
-        outputSpeech.type = 'SSML';
-        outputSpeech.ssml = text;
-    }
+const createOutputSpeechObject = (text: string, ssml: boolean): IOutputSpeech => {
+    const outputSpeech = (!ssml)
+        ? { type: 'PlainText', text: text }
+        : { type: 'SSML', ssml: text };
     return outputSpeech;
 };
 
@@ -26,9 +24,10 @@ const createOutputSpeechObject = (text, ssml) => {
  * @returns {Object} card - Card object with type, title and content or undefined if card is not specified
  */
 const createCardObject = (card) =>
-    (card) ? {type: 'Simple', title: card.title, content: card.content} : undefined;
+    (card) ? { type: 'Simple', title: card.title, content: card.content } : undefined;
 
-const createResponse = (options, slots, attrs, app) => {
+const createResponse = (options, slots, attrs, app): IResponse => {
+
     // Convert text options to object
     if(typeof(options) === 'string') {
         options = {
@@ -37,11 +36,11 @@ const createResponse = (options, slots, attrs, app) => {
     }
 
     // Create outputSpeech object for text or ssml
-    const outputSpeech = createOutputSpeechObject(options.text, options.ssml);
+    const outputSpeech: IOutputSpeech = createOutputSpeechObject(options.text, options.ssml);
 
     const responseObject = {
-        version: app.options ? app.options.version : '0.0.1',
-        sessionAttributes: options.attrs ? options.attrs : attrs,
+        version: (app.options) ? app.options.version : '0.0.1',
+        sessionAttributes: (options.attrs) ? options.attrs : attrs,
         response: {
             outputSpeech: outputSpeech,
             shouldEndSession: options.end || false
@@ -101,16 +100,13 @@ const callHandler = (handler, slots, attrs, app, done) => {
  * @param done
  */
 const checkActionsAndHandle = (intent, slots, attrs, app, handlers, done) => {
-
     if (app.actions.length === 0) {
         // There are no actions. Just call handler on this intent
         attrs.previousIntent = intent.name;
         callHandler(intent.handler, slots, attrs, app, done);
-
     } else {
         // If there are some actions, try to validate current transition
         let action = _.find(app.actions, {from: attrs.previousIntent, to: intent.name});
-
         // Try to find action with wildcards if no action was found
         if(!action) {
             action = _.find(app.actions, {from: attrs.previousIntent, to: '*'});
@@ -150,7 +146,7 @@ const checkActionsAndHandle = (intent, slots, attrs, app, handlers, done) => {
  * @param {Function} handlers - Handlers to be called. Contains onStart, onEnd, actionFail
  * @param {Function} done - Callback to be called when request is handled. Callback is called with one argument - response JSON
  */
-const handleRequest = (app, request, handlers, done) => {
+const handleRequest = (app, request, handlers: IAppHandlers, done) => {
     const appId = request.session.application.applicationId;
     const options = app.options;
 
@@ -170,26 +166,20 @@ const handleRequest = (app, request, handlers, done) => {
     const requestType = request.request.type;
 
     switch (requestType) {
-
         case RequestType.Launch:
             callHandler(handlers.onStart, null, request.session.attributes, app, done);
             break;
-
         case RequestType.Intent:
             const intentName = request.request.intent.name;
             const intent = app.intents[request.request.intent.name];
-
             if(!intent) {
                 throw new Error(`Unsupported intent: '${intentName}'`);
             }
-
             checkActionsAndHandle(intent, request.request.intent.slots, request.session.attributes, app, handlers, done);
             break;
-
         case RequestType.SessionEnd:
             callHandler(handlers.onEnd, null, request.session.attributes, app, done);
             break;
-
         default:
             throw new Error(`Unsupported request: '${requestType}'`);
     }

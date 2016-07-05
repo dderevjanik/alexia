@@ -5,7 +5,7 @@ interface IAction {
     to: string | {
         name: string;
     };
-    if: Function;
-    fail: Function;
+    if: (slots, attrs) => void;
+    fail: (slots, attrs) => void;
 }
 export = IAction;
