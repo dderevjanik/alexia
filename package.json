@@ -22,7 +22,7 @@
     "definition": "dist/alexia.d.ts"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "./node_modules/.bin/tsc",
     "lint": "tslint lib/**/*.ts",
     "lint:fix": "npm run lint -- --fix",
     "test": "istanbul cover node_modules/mocha/bin/_mocha -- -u exports --reporter spec",
